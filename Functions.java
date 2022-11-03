@@ -1,6 +1,5 @@
 import java.lang.reflect.Array;
-import java.util.Arrays;
-import java.util.Scanner;
+import java.util.*;
 
 public class Functions {
     //param
@@ -27,4 +26,45 @@ public class Functions {
         return orderOptions;
     }
 
+
+    public int GetOpenTables(Table... args){
+        List<Table> tables = new ArrayList<Table>();
+
+        Collections.addAll(tables, args);
+        for(Table i : tables){
+            if(i.isOpen()){
+                return i.tableNumber;
+            }
+        }
+        return 0;
+
+    }
+
+
+    public int HereOrToGo(int option)
+    {
+        if(option == 0){
+            System.out.println("Sorry, currently all our tables are full, would you like to order to go?");
+            Scanner listen = new Scanner(System.in);
+            //boolean correctInput = true;
+            while(true){
+                String choice = listen.nextLine().toLowerCase();
+                if (choice.equals("yes")){
+                    System.out.println("Customer chose to order to go");
+                    return 0;
+                }
+                else if (choice.equals("no")){
+                    System.out.println("We are sorry, maybe you can come back later.");
+                    return 100;
+                }
+                else
+                {
+                    System.out.println("Please answer with yes or no!");
+                    System.out.println("Would you like your order to go?");
+                }
+            }
+
+        }
+        else{return option;}
+    }
 }

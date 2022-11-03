@@ -4,11 +4,12 @@ import java.util.Scanner;
 public class Main {
 
     public static boolean isRunning = true;
-    public static Table table1 = new Table();
-    public static Table table2 = new Table();
-    public static Table table3 = new Table();
-    public static Table table4 = new Table();
-    public static Table table5 = new Table();
+    public static Table toGo = new Table(0);
+    public static Table table1 = new Table(1);
+    public static Table table2 = new Table(2);
+    public static Table table3 = new Table(3);
+    public static Table table4 = new Table(4);
+    public static Table table5 = new Table(5);
 
     public static void main(String[] args) {
         Functions func = new Functions();
@@ -28,7 +29,11 @@ public class Main {
                     case "0":
                         break;
                     case "1":
-                        break;
+                        int availability = func.GetOpenTables(table1,table2,table3,table4,table5);
+                        int hereOrToGo = func.HereOrToGo(availability);
+                        if (hereOrToGo>= 0 && hereOrToGo <=5){
+
+                        }
                     case "2":
                         break;
                     case "3":
