@@ -1,10 +1,10 @@
 public class Table extends Order{
-    boolean isOpen = false;
+    boolean isOpen = true;
     int tableNumber;
     //constructor
 
     public Table(int number){
-        super(number);
+
         tableNumber = number;
     }
     public boolean isOpen()

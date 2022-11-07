@@ -9,6 +9,16 @@ public class Functions {
 
 
     //meth
+    public int GetTableNumber(){
+        System.out.println("Please input table number");
+        Scanner in = new Scanner(System.in);
+        int tableNumber = in.nextInt();
+        while(tableNumber<=1){
+            in = new Scanner(System.in);
+        }
+        return tableNumber;
+    }
+
     public String DisplayOptions(){
         System.out.println("0. Back to main menu.");
         System.out.println("1. New order.");
@@ -16,9 +26,10 @@ public class Functions {
         System.out.println("3. Edit items from order.");
         System.out.println("4. Delete items from order.");
         System.out.println("5. Display order.");
+        System.out.println("6. Pay order.");
         Scanner listen = new Scanner(System.in);
         String orderOptions = listen.nextLine();
-        String[] options = new String[]{"0", "1", "2", "3", "4", "5"};
+        String[] options = new String[]{"0", "1", "2", "3", "4", "5","6"};
         while(!Arrays.asList(options).contains(orderOptions)){
             System.out.println("Please select from the mentioned options. (1 or 2 or 3 etc)");
             orderOptions = listen.nextLine();
@@ -67,4 +78,39 @@ public class Functions {
         }
         else{return option;}
     }
-}
+
+
+    public void askForOrder(int tableNumber){
+        System.out.println("What would you like to order?(Enter the words from the menu separated by enter key)");
+        boolean continueToOrder = true;
+        while(continueToOrder){
+            Scanner scan = new Scanner(System.in);
+            String option = scan.nextLine().toLowerCase();
+            if(option.contains(" ")){
+                option = option.replace(" ", "_");
+            }
+            //verify if option is in menu
+
+            boolean isKey = Menu.menu.containsKey(option);
+
+            if(isKey){
+                Order.ToAdd(tableNumber, option);
+                System.out.println("Noted, anything else? (answer with 'no' to finish ordering)");
+
+            }
+            else if (option.equals("no")){
+                continueToOrder = false;
+                System.out.println("Thank you, I will be right back with your order!");
+            }
+            else {
+                System.out.println("Please choose from the menu!");
+            }
+        }
+        if (tableNumber == 0){
+
+            Order.Payment(0);
+
+        }
+    }
+    }
+

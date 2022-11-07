@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.sql.SQLOutput;
 import java.util.Scanner;
 
@@ -11,7 +12,7 @@ public class Main {
     public static Table table4 = new Table(4);
     public static Table table5 = new Table(5);
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         Functions func = new Functions();
 
         System.out.println("Hello and welcome to OpenOrder.");
@@ -32,7 +33,8 @@ public class Main {
                         int availability = func.GetOpenTables(table1,table2,table3,table4,table5);
                         int hereOrToGo = func.HereOrToGo(availability);
                         if (hereOrToGo>= 0 && hereOrToGo <=5){
-
+                            Menu.loadMenu();
+                            func.askForOrder(hereOrToGo);
                         }
                     case "2":
                         break;
@@ -41,6 +43,9 @@ public class Main {
                     case "4":
                         break;
                     case "5":
+                        break;
+                    case "6":
+                        Order.Payment(func.GetTableNumber());
                         break;
                 }
             }
