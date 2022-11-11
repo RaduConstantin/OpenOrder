@@ -1,0 +1,4 @@
+Order for table 5
+hotdog ----- 2 x 8.12 => 16.24
+salad ----- 1 x 5.0 => 5.0
+mini pizza ----- 5 x 8.55 => 42.75

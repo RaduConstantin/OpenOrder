@@ -1,0 +1,9 @@
+hotdog=7.12
+burger=5.23
+mini_pizza=5.55
+chicken=4.22
+green_salad=3.90
+onion_salad=5.50
+cheese_salad=6.12
+special_salad=5.05
+salad = 4.30

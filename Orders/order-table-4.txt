@@ -1,0 +1,3 @@
+Order for table 4
+special salad ----- 4 x 6.0 => 24.0
+green salad ----- 2 x 8.1 => 16.2

@@ -1,3 +1,5 @@
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.lang.reflect.Array;
 import java.util.*;
 
@@ -7,6 +9,36 @@ public class Functions {
 
     //cons
 
+    public String getUserString(){
+        Scanner in = new Scanner(System.in);
+        String tableNumber = in.nextLine();
+        return tableNumber;
+
+}
+
+
+    public int getUserInt(){
+        Scanner in = new Scanner(System.in);
+        int tableNumber = in.nextInt();
+        while(tableNumber > 7 || tableNumber < 0){
+            System.out.println("Please choose a valid number");
+            in = new Scanner(System.in);
+            tableNumber = in.nextInt();
+        }
+        return tableNumber;
+    }
+
+    public int getUserInt(String gen){
+        Scanner in = new Scanner(System.in);
+        int tableNumber = in.nextInt();
+        while(tableNumber <0){
+            System.out.println("Please choose a valid number");
+            in = new Scanner(System.in);
+            tableNumber = in.nextInt();
+        }
+        return tableNumber;
+    }
+
 
     //meth
     public int GetTableNumber(){
@@ -15,6 +47,7 @@ public class Functions {
         int tableNumber = in.nextInt();
         while(tableNumber<=1){
             in = new Scanner(System.in);
+            tableNumber = in.nextInt();
         }
         return tableNumber;
     }
@@ -37,47 +70,17 @@ public class Functions {
         return orderOptions;
     }
 
+    public int GetOpenTables(){
 
-    public int GetOpenTables(Table... args){
-        List<Table> tables = new ArrayList<Table>();
-
-        Collections.addAll(tables, args);
-        for(Table i : tables){
-            if(i.isOpen()){
-                return i.tableNumber;
+        for(int i = 1; i <=5; i++){
+            if(Order.isPaid(i)){
+                return i;
             }
         }
         return 0;
 
     }
 
-
-    public int HereOrToGo(int option)
-    {
-        if(option == 0){
-            System.out.println("Sorry, currently all our tables are full, would you like to order to go?");
-            Scanner listen = new Scanner(System.in);
-            //boolean correctInput = true;
-            while(true){
-                String choice = listen.nextLine().toLowerCase();
-                if (choice.equals("yes")){
-                    System.out.println("Customer chose to order to go");
-                    return 0;
-                }
-                else if (choice.equals("no")){
-                    System.out.println("We are sorry, maybe you can come back later.");
-                    return 100;
-                }
-                else
-                {
-                    System.out.println("Please answer with yes or no!");
-                    System.out.println("Would you like your order to go?");
-                }
-            }
-
-        }
-        else{return option;}
-    }
 
 
     public void askForOrder(int tableNumber){
@@ -86,39 +89,17 @@ public class Functions {
         while(continueToOrder){
             Scanner scan = new Scanner(System.in);
             String option = scan.nextLine().toLowerCase();
-            if(option.contains(" ")){
-                option = option.replace(" ", "_");
-            }
-            //verify if option is in menu
-
-            boolean isKey = Menu.menu.containsKey(option);
-
-            if(isKey){
-                Order.ToAdd(tableNumber, option);
-                System.out.println("Noted, anything else? (answer with 'no' to finish ordering)");
-
-            }
-            else if (option.equals("no")){
+            if(option.equals("no")){
                 continueToOrder = false;
                 System.out.println("Thank you, I will be right back with your order!");
-            }
-            else {
-                System.out.println("Please choose from the menu!");
-            }
-        }
-        if (tableNumber == 0){
-
+            }else {
+            Order.ToAdd(tableNumber, option);
+            System.out.println("Noted, anything else? (answer with 'no' to finish ordering)");}
+       if (tableNumber == 0){
             Order.Payment(0);
+       }
 
-        }
-
-
-
-
-
-
-
-    }
+    }}
 
     public static boolean isInteger(String str) {
         if (str == null) {
@@ -142,6 +123,48 @@ public class Functions {
             }
         }
         return true;
+    }
+
+
+    public static ArrayList<String> addAllOrders(int[] ints){
+
+        ArrayList<String> items = new ArrayList<>();
+        int numberOfItems;
+        String itemName;
+        for(int i : ints){
+            ArrayList<String> eachorder = Order.ToOpen(i);
+            for(String s:eachorder){
+                if(s.contains("Order for table")){
+                }else{
+                    System.out.println("avem items");
+                System.out.println(i);
+                    String[] spliter = s.split("-----");
+                System.out.println(spliter[0] + spliter[1]);
+                    itemName = spliter[0].toString().trim();
+                    String[] secondSpliter = spliter[1].split("x");
+                    numberOfItems = Integer.parseInt(secondSpliter[0].trim());
+//                    if(s.contains(itemName)){
+//                        int indexOf = eachorder.indexOf(s);
+//                        String[] lineExist = eachorder.get(indexOf).split("-");
+//                        int existingNumber = Integer.parseInt(lineExist[1].trim());
+//                        System.out.println(existingNumber);
+//                        numberOfItems = numberOfItems + existingNumber;
+//                        System.out.println(numberOfItems);
+//                    }
+                    items.add(itemName + " - " + numberOfItems);
+
+            }}
+        }
+        return items;
+
+    }
+
+    in loc de lista foloseste coaie dict
+
+    public static ArrayList<String> cleanupOrders(ArrayList<String> newList){
+        for (String s : newList){
+
+        }
     }
 
 

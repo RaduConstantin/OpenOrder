@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -10,23 +11,19 @@ public class Order {
     public static boolean Payment(int tableNumber) {
 
         double finalVal = 0;
-        try {
-            FileInputStream fluxIn = new FileInputStream("./src/Orders/order-table-" + tableNumber + ".txt");
-            InputStreamReader isr = new InputStreamReader(fluxIn);
-            BufferedReader bufferIn = new BufferedReader(isr);
-            String line;
-            while ((line = bufferIn.readLine()) != null) {
-                if(!line.isBlank()){
-                String[] columns = line.split("=");
-                double value = Double.parseDouble(columns[1].trim());
-                finalVal = finalVal + value;
-                System.out.println(columns[0].replace("_", " ") + " - " + columns[1] + " RON");
-                }
-            }
-        } catch (IOException e) {
-            System.out.println("Sorry we do not have that type of menu.");
 
+        ArrayList<String> orderToAdd = ToOpen(tableNumber);
+
+        String[] a;
+        for(String s: orderToAdd){
+            if(s.contains("=>")){
+            a = s.split("=>");
+            System.out.println(Arrays.toString(a));
+            double value = Double.parseDouble(a[1].trim());
+            finalVal = finalVal + value;
+            }
         }
+
         System.out.println("Collected payment: " + String.format("%.2f",finalVal));
         if(tableNumber == 0){
             System.out.println("To go orders must be paid upfront!");
@@ -46,9 +43,43 @@ public class Order {
 
     }
 
+
+    public static void WriteTO(ArrayList<String> list, int tableNumber){
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter("./src/Orders/order-table-" + tableNumber + ".txt"));
+            for (String s : list) {
+                if(s.contains("_")){
+                    s = s.replace("_"," ");
+                }
+                writer.write(s + "\n");
+            }
+            writer.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+
+    public static void WriteExport(ArrayList<String> list){
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter("./src/Orders/mostSoldItems.txt"));
+            for (String s : list) {
+                if(s.contains("_")){
+                    s = s.replace("_"," ");
+                }
+                writer.write(s + "\n");
+            }
+            writer.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
     // meth to add to orders
     public static void ToAdd(int tableNumber, String arg) {
-
+        if(arg.contains(" ")){
+           arg =  arg.replace(" ","_");
+        }
         ArrayList<String> orderToAdd = ToOpen(tableNumber);
         int multiplier = 1;
         String orderName;
@@ -56,39 +87,33 @@ public class Order {
         if (arg.contains("#")) {
             String[] orderPart = arg.split("#");
             orderName = orderPart[0].trim().toLowerCase();
-            System.out.println(orderName);
             if (Functions.isInteger(orderPart[1].trim())) {
                 multiplier = Integer.parseInt(orderPart[1].trim());
             }
         } else orderName = arg;
         String newFullOrder = "";
         String fullOrder;
-        System.out.println(orderName);
-        fullOrder = orderName + " ----- " + multiplier + " x " + Menu.menu.get(orderName) + " => " + multiplier * Menu.menu.get(orderName);
-        for (String d : orderToAdd) {
-            if (d.contains(orderName)) {
-                String[] newLine = d.split( "-----" );
-                String[] oldMultiplierArr = newLine[1].split("x");
-                int oldMultiplier = Integer.parseInt(oldMultiplierArr[0].trim());
-                newFullOrder = orderName + " ----- " + (multiplier + oldMultiplier) + " x " + Menu.menu.get(orderName) + " => " + (oldMultiplier+multiplier) * Menu.menu.get(orderName);
-                int index = orderToAdd.indexOf(d);
-                System.out.println(index);
-                orderToAdd.set(index,newFullOrder);
+
+        if(Menu.menu.containsKey(orderName)){
+
+            fullOrder = orderName + " ----- " + multiplier + " x " + Menu.menu.get(orderName) + " => " + multiplier * Menu.menu.get(orderName);
+            for (String d : orderToAdd) {
+                if (d.contains(orderName)) {
+                    String[] newLine = d.split( "-----" );
+                    String[] oldMultiplierArr = newLine[1].split("x");
+                    int oldMultiplier = Integer.parseInt(oldMultiplierArr[0].trim());
+                    newFullOrder = orderName + " ----- " + (multiplier + oldMultiplier) + " x " + Menu.menu.get(orderName) + " => " + (oldMultiplier+multiplier) * Menu.menu.get(orderName);
+                    int index = orderToAdd.indexOf(d);
+                    orderToAdd.set(index,newFullOrder);
+                }
             }
+            if(newFullOrder.equals("")){
+                orderToAdd.add(fullOrder);
             }
-        if(newFullOrder.equals("")){
-            orderToAdd.add(fullOrder);
         }
 
-            try {
-                BufferedWriter writer = new BufferedWriter(new FileWriter("./src/Orders/order-table-" + tableNumber + ".txt"));
-                for (String s : orderToAdd) {
-                    writer.write(s + "\n");
-                }
-                writer.close();
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
+        Order.WriteTO(orderToAdd,tableNumber);
+
         }
     // method to open orders (either to display or to modify)
     public static ArrayList<String> ToOpen(int tableNumber){
@@ -112,6 +137,7 @@ public class Order {
     public static void Clear(int tableNumber){
         try{
             FileWriter myWriter = new FileWriter("./src/Orders/order-table-" + tableNumber + ".txt");
+            myWriter.write("Order for table " + tableNumber);
             myWriter.close();
         }catch (IOException e){
             System.out.println();
@@ -122,53 +148,86 @@ public class Order {
 
 
 
+
     public static void ToEdit(int tableNumber, String what, int right, int wrong){
         ArrayList<String> orderToAdd = ToOpen(tableNumber);
         String longName = what + " ----- " + wrong + " x "  + Menu.menu.get(what) + " => " + wrong*Menu.menu.get(what);
-        System.out.println(longName);
         if(orderToAdd.contains(longName)){
+            System.out.println("Found order");
             String rightName = what + " ----- " + right + " x "  + Menu.menu.get(what) + " => " + right*Menu.menu.get(what);
             orderToAdd.set(orderToAdd.indexOf(longName),rightName);
         }else {
             System.out.println("Item not on order, ask customer again!");}
-        try{
-            BufferedWriter writer = new BufferedWriter(new FileWriter("./src/Orders/order-table-" + tableNumber + ".txt"));
-            for (String s : orderToAdd){
-                writer.write(s+"\n");
-            }
-            writer.close();
-        }
-        catch (Exception ex) { ex.printStackTrace(); }
+
+        Order.WriteTO(orderToAdd,tableNumber);
+//        try{
+//            BufferedWriter writer = new BufferedWriter(new FileWriter("./src/Orders/order-table-" + tableNumber + ".txt"));
+//            for (String s : orderToAdd){
+//                writer.write(s+"\n");
+//            }
+//            writer.close();
+//        }
+//        catch (Exception ex) { ex.printStackTrace(); }
     }
 
 
 
-    public boolean ToDelete(int tableNumber, String arg) throws IOException {
-        File inputFile = new File("./src/Orders/order-table-" + tableNumber + ".txt");
-        BufferedReader reader = new BufferedReader(new FileReader(inputFile));
+    public static void ToDelete(int tableNumber, String arg) throws IOException {
+        ArrayList<String> orderToAdd = ToOpen(tableNumber);
 
-        File tempFile = new File("./src/Orders/temp.txt");
-        BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
-
-        String toRemove = arg;
-        String currentLine;
-
-        while((currentLine = reader.readLine()) != null){
-            String[] splitedLine = currentLine.split("=");
-            String orderName = splitedLine[0].trim();
-            System.out.println(orderName);
-            if(orderName.equals(toRemove)) {
-                continue;
+        int indexOfDelete = -1;
+        for(String s : orderToAdd){
+            if(s.contains(arg)){
+                indexOfDelete = orderToAdd.indexOf(s);
             }
-            writer.write(currentLine + "\n");
-
         }
-        writer.close();
-        reader.close();
-        return tempFile.renameTo(inputFile);
+        if(indexOfDelete>0){
+        orderToAdd.remove(indexOfDelete);
+            System.out.println("Item deleted!");}
+
+        Order.WriteTO(orderToAdd,tableNumber);
+//        try{
+//            BufferedWriter writer = new BufferedWriter(new FileWriter("./src/Orders/order-table-" + tableNumber + ".txt"));
+//            for (String s : orderToAdd){
+//                writer.write(s+"\n");
+//            }
+//            writer.close();
+//        }
+//        catch (Exception ex) { ex.printStackTrace(); }
 
     }
 
+
+    public static void Display(int tableNumber) throws IOException {
+        ArrayList<String> orderToAdd = ToOpen(tableNumber);
+
+        Order.WriteTO(orderToAdd,tableNumber);
+//        try{
+//            BufferedWriter writer = new BufferedWriter(new FileWriter("./src/Orders/order-table-" + tableNumber + ".txt"));
+//            for (String s : orderToAdd){
+//                writer.write(s+"\n");
+//                System.out.println(s);
+//            }
+//            writer.close();
+//        }
+//        catch (Exception ex) { ex.printStackTrace(); }
+
+    }
+
+    public static boolean isPaid(int tableNumber){
+        ArrayList<String> orderToAdd = ToOpen(tableNumber);
+        int counter = 0;
+        for (String s : orderToAdd){
+            if(!s.isBlank()){
+                counter++;
+            }
+        }
+        if (counter==1){
+            return true;
+        }
+        else return false;
+
+    }
 
 
 }

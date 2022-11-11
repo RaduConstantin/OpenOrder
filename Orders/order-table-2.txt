@@ -1,0 +1,4 @@
+Order for table 2
+burger ----- 10 x 7.33 => 73.3
+chicken ----- 7 x 6.22 => 43.54
+cheese salad ----- 10 x 8.12 => 81.19999999999999
