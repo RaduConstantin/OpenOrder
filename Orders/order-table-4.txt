@@ -1,3 +1,5 @@
 Order for table 4
 special salad ----- 4 x 6.0 => 24.0
 green salad ----- 2 x 8.1 => 16.2
+burger ----- 10 x 7.33 => 73.3
+onion salad ----- 5 x 7.0 => 35.0

@@ -23,18 +23,12 @@ public class Order {
             finalVal = finalVal + value;
             }
         }
-
         System.out.println("Collected payment: " + String.format("%.2f",finalVal));
-        if(tableNumber == 0){
-            System.out.println("To go orders must be paid upfront!");
-        }
         System.out.println("Process payment? (yes/no)");
         Scanner scan = new Scanner(System.in);
         String agree = scan.nextLine().toLowerCase();
-
         while (!agree.equals("yes")){
             System.out.println("Order cannot be processed!");
-
             agree = scan.nextLine().toLowerCase();
         }
         System.out.println("Clear order table " + tableNumber);
@@ -42,27 +36,9 @@ public class Order {
         return true;
 
     }
-
-
     public static void WriteTO(ArrayList<String> list, int tableNumber){
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter("./src/Orders/order-table-" + tableNumber + ".txt"));
-            for (String s : list) {
-                if(s.contains("_")){
-                    s = s.replace("_"," ");
-                }
-                writer.write(s + "\n");
-            }
-            writer.close();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
-
-    public static void WriteExport(ArrayList<String> list){
-        try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter("./src/Orders/mostSoldItems.txt"));
             for (String s : list) {
                 if(s.contains("_")){
                     s = s.replace("_"," ");
@@ -132,8 +108,6 @@ public class Order {
 
     }
 
-
-    ///Clear might be deleted
     public static void Clear(int tableNumber){
         try{
             FileWriter myWriter = new FileWriter("./src/Orders/order-table-" + tableNumber + ".txt");
@@ -144,10 +118,6 @@ public class Order {
         }
 
     }
-
-
-
-
 
     public static void ToEdit(int tableNumber, String what, int right, int wrong){
         ArrayList<String> orderToAdd = ToOpen(tableNumber);
@@ -160,17 +130,7 @@ public class Order {
             System.out.println("Item not on order, ask customer again!");}
 
         Order.WriteTO(orderToAdd,tableNumber);
-//        try{
-//            BufferedWriter writer = new BufferedWriter(new FileWriter("./src/Orders/order-table-" + tableNumber + ".txt"));
-//            for (String s : orderToAdd){
-//                writer.write(s+"\n");
-//            }
-//            writer.close();
-//        }
-//        catch (Exception ex) { ex.printStackTrace(); }
     }
-
-
 
     public static void ToDelete(int tableNumber, String arg) throws IOException {
         ArrayList<String> orderToAdd = ToOpen(tableNumber);
@@ -186,33 +146,14 @@ public class Order {
             System.out.println("Item deleted!");}
 
         Order.WriteTO(orderToAdd,tableNumber);
-//        try{
-//            BufferedWriter writer = new BufferedWriter(new FileWriter("./src/Orders/order-table-" + tableNumber + ".txt"));
-//            for (String s : orderToAdd){
-//                writer.write(s+"\n");
-//            }
-//            writer.close();
-//        }
-//        catch (Exception ex) { ex.printStackTrace(); }
-
     }
 
-
-    public static void Display(int tableNumber) throws IOException {
+    public static void Display(int tableNumber) {
         ArrayList<String> orderToAdd = ToOpen(tableNumber);
-
-        Order.WriteTO(orderToAdd,tableNumber);
-//        try{
-//            BufferedWriter writer = new BufferedWriter(new FileWriter("./src/Orders/order-table-" + tableNumber + ".txt"));
-//            for (String s : orderToAdd){
-//                writer.write(s+"\n");
-//                System.out.println(s);
-//            }
-//            writer.close();
-//        }
-//        catch (Exception ex) { ex.printStackTrace(); }
-
-    }
+        for(String s : orderToAdd){
+            System.out.println(s);
+            }
+        }
 
     public static boolean isPaid(int tableNumber){
         ArrayList<String> orderToAdd = ToOpen(tableNumber);
@@ -226,8 +167,5 @@ public class Order {
             return true;
         }
         else return false;
-
     }
-
-
 }

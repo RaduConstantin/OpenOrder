@@ -1,1 +1,5 @@
 Order for table 1
+burger ----- 10 x 7.33 => 73.3
+mini pizza ----- 12 x 8.55 => 102.60000000000001
+onion salad ----- 7 x 7.0 => 49.0
+chicken ----- 12 x 6.22 => 74.64

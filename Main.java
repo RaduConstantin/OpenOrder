@@ -1,8 +1,11 @@
 import java.io.IOException;
 import java.sql.SQLOutput;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
+
+import static java.lang.System.exit;
 
 public class Main {
 
@@ -17,7 +20,7 @@ public class Main {
         while(isRunning){
             System.out.println("1.Orders");
             System.out.println("2.Administrative");
-            System.out.println("3. Exit");
+            System.out.println("3.Exit");
             String openingChoice = listen.nextLine();
 
             if(openingChoice.equals("1")){
@@ -28,11 +31,13 @@ public class Main {
                         break;
                     case "1":
                         int availability = func.GetOpenTables();
-                        if (availability>= 0 && availability <=5){
+                        if (availability> 0 && availability <=5){
                             System.out.println("This is table "+availability);
                             Menu.loadMenu();
                             func.askForOrder(availability);
                         }
+                        else{
+                            System.out.println("No tables available!");}
                         break;
                     case "2":
                         System.out.println("Please choose a table");
@@ -47,18 +52,24 @@ public class Main {
                         break;
                     case "3":
                         Menu.loadMenu("silent");
-                        System.out.println("Please input the table number, name of item that is wrong, right number, wrong number");
-                        int userIntEdit = func.getUserInt("General");
+                        System.out.println("Please input the table number");
+                        int userIntEdit = func.getUserInt();
+                        Order.Display(userIntEdit);
+                        System.out.println("Please input name of item that is wrong, right number, wrong number");
+
                         String userStringEdit = func.getUserString();
                         int userIntRight = func.getUserInt("General");
                         int userIntWrong = func.getUserInt("General");
+
                         Order.ToEdit(userIntEdit,userStringEdit,userIntRight,userIntWrong);
                         System.out.println("Order has been modified!");
                         break;
                     case "4":
                         Menu.loadMenu("silent");
-                        System.out.println("Please input the table number and the name of the item you want to delete.");
-                        int userIntDelete = func.getUserInt("General");
+                        System.out.println("Please input table number");
+                        int userIntDelete = func.getUserInt();
+                        Order.Display(userIntDelete);
+                        System.out.println("Please input the name of the item you want to delete.");
                         String userStringDelete = func.getUserString();
                         Order.ToDelete(userIntDelete,userStringDelete);
                         break;
@@ -75,8 +86,12 @@ public class Main {
             }
             else if(openingChoice.equals("2")){
                 int[] orders = {0,1,2,3,4,5};
-                func.addAllOrders(orders);
-                //displayAllOrders();
+                HashMap<String, Integer> order = Functions.addAllOrders(orders);
+                Functions.updateReport(order);
+                System.out.println("Report has been generated");
+            }
+            else if(openingChoice.equals("3")) {
+                break;
             }
             else{
                 System.out.println("Please choose from the menu (1 or 2).");

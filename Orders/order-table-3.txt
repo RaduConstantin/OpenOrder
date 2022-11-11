@@ -1,1 +1,5 @@
 Order for table 3
+chicken ----- 12 x 6.22 => 74.64
+special salad ----- 4 x 6.0 => 24.0
+salad ----- 11 x 5.0 => 55.0
+onion salad ----- 7 x 7.0 => 49.0

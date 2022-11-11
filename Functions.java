@@ -1,13 +1,9 @@
-import java.io.BufferedWriter;
-import java.io.FileWriter;
+import java.io.*;
 import java.lang.reflect.Array;
+import java.security.KeyStore;
 import java.util.*;
 
 public class Functions {
-    //param
-
-
-    //cons
 
     public String getUserString(){
         Scanner in = new Scanner(System.in);
@@ -33,19 +29,6 @@ public class Functions {
         int tableNumber = in.nextInt();
         while(tableNumber <0){
             System.out.println("Please choose a valid number");
-            in = new Scanner(System.in);
-            tableNumber = in.nextInt();
-        }
-        return tableNumber;
-    }
-
-
-    //meth
-    public int GetTableNumber(){
-        System.out.println("Please input table number");
-        Scanner in = new Scanner(System.in);
-        int tableNumber = in.nextInt();
-        while(tableNumber<=1){
             in = new Scanner(System.in);
             tableNumber = in.nextInt();
         }
@@ -95,11 +78,9 @@ public class Functions {
             }else {
             Order.ToAdd(tableNumber, option);
             System.out.println("Noted, anything else? (answer with 'no' to finish ordering)");}
-       if (tableNumber == 0){
-            Order.Payment(0);
        }
 
-    }}
+    }
 
     public static boolean isInteger(String str) {
         if (str == null) {
@@ -126,9 +107,8 @@ public class Functions {
     }
 
 
-    public static ArrayList<String> addAllOrders(int[] ints){
-
-        ArrayList<String> items = new ArrayList<>();
+    public static HashMap<String,Integer> addAllOrders(int[] ints){
+        HashMap<String, Integer> combinedOrders = new HashMap<>();
         int numberOfItems;
         String itemName;
         for(int i : ints){
@@ -136,37 +116,46 @@ public class Functions {
             for(String s:eachorder){
                 if(s.contains("Order for table")){
                 }else{
-                    System.out.println("avem items");
-                System.out.println(i);
                     String[] spliter = s.split("-----");
-                System.out.println(spliter[0] + spliter[1]);
-                    itemName = spliter[0].toString().trim();
+
+                    itemName = spliter[0].trim();
                     String[] secondSpliter = spliter[1].split("x");
                     numberOfItems = Integer.parseInt(secondSpliter[0].trim());
-//                    if(s.contains(itemName)){
-//                        int indexOf = eachorder.indexOf(s);
-//                        String[] lineExist = eachorder.get(indexOf).split("-");
-//                        int existingNumber = Integer.parseInt(lineExist[1].trim());
-//                        System.out.println(existingNumber);
-//                        numberOfItems = numberOfItems + existingNumber;
-//                        System.out.println(numberOfItems);
-//                    }
-                    items.add(itemName + " - " + numberOfItems);
-
+                    if(combinedOrders.containsKey(itemName)){
+                        combinedOrders.put(itemName,combinedOrders.get(itemName)+numberOfItems);
+                    }
+                    else{
+                        combinedOrders.put(itemName,numberOfItems);
+                    }
             }}
         }
-        return items;
+        LinkedHashMap<String,Integer> orderedMap = new LinkedHashMap<>();
+        combinedOrders.entrySet()
+                .stream()
+                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                .forEachOrdered(x -> orderedMap.put(x.getKey(), x.getValue()));
+
+
+        return orderedMap;
 
     }
 
-    in loc de lista foloseste coaie dict
 
-    public static ArrayList<String> cleanupOrders(ArrayList<String> newList){
-        for (String s : newList){
-
+    public static void updateReport(HashMap<String, Integer> map){
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter("./src/Reports/numberOfItemsSold.txt"));
+            for (Map.Entry<String, Integer> entry : map.entrySet()) {
+                String key = entry.getKey();
+                int value = entry.getValue();
+                writer.write(key + " - " + value + "\n");
+            }
+            writer.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 
 
-    }
+
+}
 

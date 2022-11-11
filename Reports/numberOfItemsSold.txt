@@ -1,0 +1,8 @@
+onion salad - 126
+chicken - 48
+burger - 40
+salad - 33
+mini pizza - 24
+hotdog - 12
+special salad - 8
+green salad - 2

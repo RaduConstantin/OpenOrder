@@ -1,4 +1,6 @@
 Order for table 2
 burger ----- 10 x 7.33 => 73.3
-chicken ----- 7 x 6.22 => 43.54
-cheese salad ----- 10 x 8.12 => 81.19999999999999
+chicken ----- 12 x 6.22 => 74.64
+salad ----- 11 x 5.0 => 55.0
+hotdog ----- 12 x 8.12 => 97.44
+onion salad ----- 100 x 7.0 => 700.0
